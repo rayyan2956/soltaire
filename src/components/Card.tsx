@@ -22,8 +22,8 @@ const Card: React.FC<CardProps> = ({ rank, suit, color, faceUp }) => {
       } 
       hover:scale-105 hover:shadow-[0_8px_25px_rgba(0,0,0,0.6)]`}
       style={{
-        width: "130px",
-        height: "185px",
+        width: "150px",
+        height: "205px",
         borderColor: faceUp ? "#e5e7eb" : "#991b1b",
       }}
     >
