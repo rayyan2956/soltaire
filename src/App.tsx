@@ -12,7 +12,10 @@ function App() {
       <Navbar />
 
       <div className="flex justify-between items-start px-32 mt-8">
+        <div className=' flex justify-between mr-0.5'>
+
         <Stockpile />
+        </div>
         <Foundation />
       </div>
 

@@ -8,25 +8,61 @@ interface CardProps {
 }
 
 const Card: React.FC<CardProps> = ({ rank, suit, color, faceUp }) => {
+  const textColor = color === "red" ? "text-red-600" : "text-gray-900";
+  const suitSymbol = { "♠": "♠️", "♥": "♥️", "♦": "♦️", "♣": "♣️" }[suit];
+
   return (
     <div
-      className={`w-20 h-28 rounded-xl border shadow-md flex flex-col justify-between p-2 transition-transform ${
-        faceUp ? "bg-white" : "bg-green-900"
-      }`}
+      className={`relative flex flex-col justify-between p-3 rounded-2xl border-2
+      shadow-[0_6px_20px_rgba(0,0,0,0.4)] transition-transform duration-300 
+      ${
+        faceUp
+          ? "bg-linear-to-br from-white to-gray-100"
+          : "bg-linear-to-br from-red-800 to-red-900"
+      } 
+      hover:scale-105 hover:shadow-[0_8px_25px_rgba(0,0,0,0.6)]`}
+      style={{
+        width: "130px",
+        height: "185px",
+        borderColor: faceUp ? "#e5e7eb" : "#991b1b",
+      }}
     >
-      {faceUp && (
+      {/* Card Border Shine */}
+      <div className="absolute inset-0 rounded-2xl bg-white/10 blur-sm pointer-events-none" />
+
+      {faceUp ? (
         <>
-          <span className={`text-sm font-bold ${color === "red" ? "text-red-600" : "text-black"}`}>
+          {/* Top Left */}
+          <div
+            className={`absolute top-2 left-2 text-lg font-bold ${textColor}`}
+          >
             {rank}
-          </span>
-          <span className={`text-2xl self-end ${color === "red" ? "text-red-600" : "text-black"}`}>
+            <div className="-mt-1">{suit}</div>
+          </div>
+
+          {/* Center Suit */}
+          <div
+            className={`text-6xl font-semibold ${textColor} flex items-center justify-center w-full h-full`}
+          >
             {suit}
-          </span>
+          </div>
+
+          {/* Bottom Right (mirrored) */}
+          <div
+            className={`absolute bottom-2 right-2 text-lg font-bold ${textColor} rotate-180`}
+          >
+            {rank}
+            <div className="-mt-1">{suitSymbol}</div>
+          </div>
         </>
+      ) : (
+        // Card Back Design
+        <div className="w-full h-full rounded-xl flex items-center justify-center">
+          <div className="w-16 h-24 bg-[repeating-linear-gradient(45deg,#b91c1c,#b91c1c_5px,#7f1d1d_5px,#7f1d1d_10px)] rounded-lg border border-white/20"></div>
+        </div>
       )}
     </div>
   );
 };
 
 export default Card;
-        
