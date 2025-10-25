@@ -8,23 +8,27 @@ interface StockpileProps {
 }
 
 const Stockpile: React.FC<StockpileProps> = ({ game, setGame }) => {
-
   const drawCards = () => {
     if (game.stock.length === 0) return;
 
     const newStock = [...game.stock];
-    const drawCount = Math.min(3, newStock.length);
-    const drawnCards = newStock.splice(-drawCount);
-    const newWaste = [...game.waste, ...drawnCards.map(c => ({ ...c, faceup: true }))];
+    const drawnCards = [];
 
-    setGame(prev => ({ ...prev, stock: newStock, waste: newWaste }));
+    for (let i = 0; i < 3; i++) {
+      const card = newStock.pop(); 
+      if (!card) break;
+      drawnCards.push({ ...card, faceup: true });
+    }
+
+    const newWaste = [...game.waste, ...drawnCards];
+    setGame((prev) => ({ ...prev, stock: newStock, waste: newWaste }));
   };
 
   const resetStock = () => {
     if (game.waste.length === 0) return;
 
-    const newStock = game.waste.map(c => ({ ...c, faceup: false })).reverse();
-    setGame(prev => ({ ...prev, stock: newStock, waste: [] }));
+    const newStock = game.waste.map((c) => ({ ...c, faceup: false })).reverse(); 
+    setGame((prev) => ({ ...prev, stock: newStock, waste: [] }));
   };
 
   return (
@@ -32,11 +36,15 @@ const Stockpile: React.FC<StockpileProps> = ({ game, setGame }) => {
       {/* Stock */}
       <div
         className={`w-40 h-60 border border-white/30 rounded-lg shadow-md flex items-center justify-center cursor-pointer
-          ${game.stock.length > 0 ? "bg-red-800" : "bg-gray-700"} transition-colors duration-300`}
+          ${
+            game.stock.length > 0 ? "bg-red-800" : "bg-gray-700"
+          } transition-colors duration-300`}
         onClick={game.stock.length > 0 ? drawCards : resetStock}
       >
         {game.stock.length > 0 ? (
-          <div className="text-white/50 text-sm">Deck ({game.stock.length})</div>
+          <div className="text-white/50 text-sm">
+            Deck ({game.stock.length})
+          </div>
         ) : (
           <div className="text-white/50 text-sm">
             {game.waste.length > 0 ? "Reset Deck" : "Empty"}
@@ -53,7 +61,12 @@ const Stockpile: React.FC<StockpileProps> = ({ game, setGame }) => {
               hover:-translate-y-2 hover:scale-105`}
             style={{ zIndex: i }}
           >
-            <Card rank={card.rank} suit={card.suit} color={card.color} faceUp={true} />
+            <Card
+              rank={card.rank}
+              suit={card.suit}
+              color={card.color}
+              faceUp={true}
+            />
           </div>
         ))}
       </div>
