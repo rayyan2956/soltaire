@@ -10,7 +10,7 @@ export const initializeGame = (): GameState => {
   let index = 0;
 
   for (let i = 0; i < 7; i++) {
-    tableau[i] = deck.slice(index, index + i + 1);
+    tableau[i] = deck.slice(index, index + i +3);
     tableau[i][i].faceup = true; 
     index += i + 1;
   }

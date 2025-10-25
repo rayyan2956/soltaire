@@ -22,7 +22,7 @@ const Foundation: React.FC<FoundationProps> = ({ foundations }) => {
                 rank={topCard.rank}
                 suit={topCard.suit}
                 color={topCard.color}
-                faceUp={true}
+                faceUp={topCard.faceup}
               />
             ) : (
               <span className="text-white/40 text-2xl">
