@@ -22,7 +22,7 @@ const Card: React.FC<CardProps> = ({ rank, suit, color, faceUp }) => {
       ${
         faceUp
           ? "bg-linear-to-br from-white to-gray-100"
-          : "bg-linear-to-br from-red-800 to-red-900"
+          : "bg-linear-to-br from-red-500 to-red-900"
       }
       hover:scale-105 hover:shadow-[0_8px_25px_rgba(0,0,0,0.6)]`}
       style={{

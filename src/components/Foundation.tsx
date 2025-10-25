@@ -1,10 +1,13 @@
-import React, { useState } from "react";
+import React from "react";
 import Card from "./Card";
-import type { Card as CardType } from "../data/deck";
+import type { Card as CardType } from "../data/Deck";
 
-const Foundation: React.FC = () => {
-  const [foundations] = useState<CardType[][]>([[], [], [], []]);
+interface FoundationProps {
+  foundations: CardType[][];
+}
 
+const Foundation: React.FC<FoundationProps> = ({ foundations }) => {
+  
   return (
     <div className="flex gap-4 justify-end">
       {foundations.map((pile, i) => {

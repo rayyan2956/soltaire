@@ -8,7 +8,6 @@ const Navbar: React.FC = () => {
       {/* Left Side */}
       <div className="flex items-center space-x-2">
         <span className="font-black text-2xl tracking-wide mr-8">Solitaire</span>
-        <button className="bg-green-500 hover:bg-green-600 px-3 py-1 font-medium rounded-xl">Turn 1</button>
         <button className="bg-green-500 hover:bg-green-600 px-3 py-1 font-medium rounded-xl">Turn 3</button>
         <button className="bg-green-500 hover:bg-green-600 px-3 py-1 font-medium rounded-xl">New game</button>
      
