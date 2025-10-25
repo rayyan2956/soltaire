@@ -11,19 +11,27 @@ const Card: React.FC<CardProps> = ({ rank, suit, color, faceUp }) => {
   const textColor = color === "red" ? "text-red-600" : "text-gray-900";
   const suitSymbol = { "♠": "♠️", "♥": "♥️", "♦": "♦️", "♣": "♣️" }[suit];
 
+  // Map rank to numeric value for layout
+  const numericValue = parseInt(rank);
+  const isNumberCard = !isNaN(numericValue);
+
   return (
     <div
       className={`relative flex flex-col justify-between p-3 rounded-2xl border-2
-      shadow-[0_6px_20px_rgba(0,0,0,0.4)] transition-transform duration-300 
+      shadow-[0_6px_20px_rgba(0,0,0,0.4)] transition-transform duration-300
       ${
         faceUp
           ? "bg-linear-to-br from-white to-gray-100"
           : "bg-linear-to-br from-red-800 to-red-900"
-      } 
+      }
       hover:scale-105 hover:shadow-[0_8px_25px_rgba(0,0,0,0.6)]`}
       style={{
-        width: "150px",
-        height: "205px",
+        width: "10vw",
+        height: "14vw",
+        maxWidth: "180px",
+        maxHeight: "250px",
+        minWidth: "180px",
+        minHeight: "250px",
         borderColor: faceUp ? "#e5e7eb" : "#991b1b",
       }}
     >
@@ -33,21 +41,30 @@ const Card: React.FC<CardProps> = ({ rank, suit, color, faceUp }) => {
       {faceUp ? (
         <>
           {/* Top Left */}
-          <div
-            className={`absolute top-2 left-2 text-lg font-bold ${textColor}`}
-          >
+          <div className={`absolute top-2 left-2 text-lg font-bold ${textColor}`}>
             {rank}
-            <div className="-mt-1">{suit}</div>
+            <div className="-mt-1">{suitSymbol}</div>
           </div>
 
-          {/* Center Suit */}
-          <div
-            className={`text-6xl font-semibold ${textColor} flex items-center justify-center w-full h-full`}
-          >
-            {suit}
+          {/* Center area */}
+          <div className="flex flex-col items-center justify-center h-full">
+            {isNumberCard ? (
+              // Numbered cards show multiple suit symbols
+              <div
+                className={`grid grid-cols-3 gap-y-1 justify-items-center text-2xl ${textColor}`}
+                style={{ gridTemplateRows: `repeat(${Math.ceil(numericValue / 3)}, 1fr)` }}
+              >
+                {Array.from({ length: numericValue }).map((_, i) => (
+                  <div key={i}>{suit}</div>
+                ))}
+              </div>
+            ) : (
+              // Face cards (J, Q, K, A)
+              <div className={`text-6xl font-semibold ${textColor}`}>{rank}</div>
+            )}
           </div>
 
-          {/* Bottom Right (mirrored) */}
+          {/* Bottom Right */}
           <div
             className={`absolute bottom-2 right-2 text-lg font-bold ${textColor} rotate-180`}
           >

@@ -12,7 +12,7 @@ const Tableau: React.FC = () => {
           {pile.map((card, j) => (
             <div
               key={card.id}
-              className={j === 0 ? "" : "-mt-[180px]"} // card overlap
+              className={j === 0 ? "" : "-mt-[225px]"} // card overlap
             >
               <Card
                 rank={card.rank}
