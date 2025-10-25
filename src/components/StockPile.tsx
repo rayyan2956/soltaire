@@ -45,7 +45,7 @@ const Stockpile: React.FC<StockpileProps> = ({ game, setGame }) => {
       </div>
 
       {/* Waste */}
-      <div className="flex -space-x-25 relative w-80 h-60">
+      <div className="flex -space-x-15 relative w-80 h-60">
         {game.waste.slice(-3).map((card, i) => (
           <div
             key={card.id}

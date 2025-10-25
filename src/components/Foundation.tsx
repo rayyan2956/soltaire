@@ -15,7 +15,7 @@ const Foundation: React.FC<FoundationProps> = ({ foundations }) => {
         return (
           <div
             key={i}
-            className="w-20 h-28 rounded-lg border border-white/30 bg-white/10 backdrop-blur-sm flex items-center justify-center"
+            className="w-40 h-64 rounded-lg border border-white/30 bg-white/10 backdrop-blur-sm flex items-center justify-center"
           >
             {topCard ? (
               <Card
@@ -25,7 +25,7 @@ const Foundation: React.FC<FoundationProps> = ({ foundations }) => {
                 faceUp={topCard.faceup}
               />
             ) : (
-              <span className="text-white/40 text-2xl">
+              <span className="text-gray-200 text-2xl">
                 {["♠", "♥", "♦", "♣"][i]}
               </span>
             )}

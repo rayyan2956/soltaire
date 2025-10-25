@@ -21,7 +21,7 @@ const Card: React.FC<CardProps> = ({ rank, suit, color, faceUp }) => {
       shadow-[0_6px_20px_rgba(0,0,0,0.4)] transition-transform duration-300
       ${
         faceUp
-          ? "bg-linear-to-br from-white to-gray-100"
+          ? "bg-linear-to-br from-white to-gray-400"
           : "bg-linear-to-br from-red-500 to-red-900"
       }
       hover:scale-105 hover:shadow-[0_8px_25px_rgba(0,0,0,0.6)]`}
@@ -31,7 +31,7 @@ const Card: React.FC<CardProps> = ({ rank, suit, color, faceUp }) => {
         maxWidth: "180px",
         maxHeight: "250px",
         minWidth: "180px",
-        minHeight: "250px",
+        minHeight: "255px",
         borderColor: faceUp ? "#e5e7eb" : "#991b1b",
       }}
     >
