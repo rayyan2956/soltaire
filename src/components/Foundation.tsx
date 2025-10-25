@@ -1,0 +1,36 @@
+import React, { useState } from "react";
+import Card from "./Card";
+import type { Card as CardType } from "../data/deck";
+
+const Foundation: React.FC = () => {
+  const [foundations] = useState<CardType[][]>([[], [], [], []]);
+
+  return (
+    <div className="flex gap-4 justify-end">
+      {foundations.map((pile, i) => {
+        const topCard = pile[pile.length - 1];
+        return (
+          <div
+            key={i}
+            className="w-20 h-28 rounded-lg border border-white/30 bg-white/10 backdrop-blur-sm flex items-center justify-center"
+          >
+            {topCard ? (
+              <Card
+                rank={topCard.rank}
+                suit={topCard.suit}
+                color={topCard.color}
+                faceUp={true}
+              />
+            ) : (
+              <span className="text-white/40 text-2xl">
+                {["♠", "♥", "♦", "♣"][i]}
+              </span>
+            )}
+          </div>
+        );
+      })}
+    </div>
+  );
+};
+
+export default Foundation;
