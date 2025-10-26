@@ -12,7 +12,6 @@ export const initializeGame = (): GameState => {
   for (let i = 0; i < 7; i++) {
     tableau[i] = deck.slice(index, index + i + 1);
     tableau[i][i].faceup = true; 
-    console.log(tableau[i][i]);
     index += i + 1;
   }
 

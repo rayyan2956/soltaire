@@ -16,6 +16,7 @@ export function moveCardToFoundation(
     const sourceIndex = tableau.findIndex((pile) =>
       pile.some((c) => c.id === card.id)
     );
+    console.log("source index:", sourceIndex);
 
     if (sourceIndex === -1) return game; // card not found
 
@@ -55,6 +56,9 @@ export const moveCardToTableau = (
     const pileIndex = newTableau.findIndex((p) => p.includes(card));
     const pile = newTableau[pileIndex];
     newTableau[pileIndex] = pile.slice(0, pile.indexOf(card));
+
+    const topCard = newTableau[pileIndex][newTableau[pileIndex].length - 1];
+    if (topCard && !topCard.faceup) topCard.faceup = true;
   }
 
   // add to tableau

@@ -11,25 +11,18 @@ interface TableauProps {
 }
 
 const Tableau: React.FC<TableauProps> = ({ game, setGame }) => {
-  const handleClick = (card: CardType) => {
-    console.log("caled" + card.faceup + card.rank);
-    if (!card.faceup) return;
-
-    const foundationIndex = game.foundations.findIndex((foundation) =>
-      canMoveToFoundation(card, foundation)
-    );
-
-    if (foundationIndex >= 0) {
-      setGame((prev) => moveCardToFoundation(prev, card, "tableau", foundationIndex));
-    }
-  };
+  
   const handleDragStart = (e: React.DragEvent, card: CardType) => {
     e.dataTransfer.setData("cardId", card.id.toString());
   };
   const handleDrop = (e: React.DragEvent, targetPileIndex: number) => {
+    console.log("target pile index:", targetPileIndex); 
     const cardId = Number(e.dataTransfer.getData("cardId"));
+    console.log("dropped card id:", cardId);
+    console.log()
     const draggedCard = game.tableau.flat().find((c) => c.id === cardId);
     if (!draggedCard) return;
+    console.log("found dragged card:", draggedCard);
 
     // Validate move (add logic here)
     // For now, just move it
@@ -51,7 +44,6 @@ const Tableau: React.FC<TableauProps> = ({ game, setGame }) => {
             <div
               key={card.id}
               className={j === 0 ? "" : "-mt-[225px]"}
-              onClick={() => handleClick(card)}
               draggable={card.faceup} 
               onDragStart={(e) => handleDragStart(e, card)} 
             >
