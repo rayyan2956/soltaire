@@ -8,6 +8,7 @@ interface FoundationProps {
   setGame: React.Dispatch<React.SetStateAction<GameState>>;
 }
 
+
 const Foundation: React.FC<FoundationProps> = ({ game, setGame }) => {
   const handleDrop = (e: React.DragEvent, foundationIndex: number) => {
     e.preventDefault();
@@ -23,7 +24,8 @@ const Foundation: React.FC<FoundationProps> = ({ game, setGame }) => {
     console.log("source of foundation drop:", source);
     // Move to foundation
     setGame((prev) =>
-      moveCardToFoundation(prev, card, source, foundationIndex)
+      moveCardToFoundation(prev, card, source, foundationIndex),
+    
     );
   };
 

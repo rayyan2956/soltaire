@@ -5,6 +5,5 @@ export interface GameState {
   waste: Card[];
   tableau: Card[][];
   foundations: Card[][];
-
-
+  
 }
