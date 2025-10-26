@@ -1,8 +1,6 @@
 import type { GameState } from "./GameState";
 import type { Card } from "../data/Deck";
 
-
-
 export function moveCardToFoundation(
   game: GameState,
   card: Card,
@@ -44,17 +42,25 @@ export function moveCardToFoundation(
 export const moveCardToTableau = (
   game: GameState,
   card: Card,
-  source: "waste" | "tableau",
+  source: "tableau" | "waste",
   tableauIndex: number
 ): GameState => {
   const newTableau = game.tableau.map((p) => [...p]);
-  const newWaste = [...game.waste];
-
+  let newWaste = [...game.waste];
   // remove from source
-  if (source === "waste") newWaste.pop();
-  else {
+
+
+  console.log("source:", source);
+  if (source === "waste") {
+    newWaste = newWaste.filter((c) => c.id !== card.id);
+    console.log("new waste:", newWaste);
+
+  } else {
     const pileIndex = newTableau.findIndex((p) => p.includes(card));
+    console.log("pile index:", pileIndex);
+    if (pileIndex === -1) return game; // card not found
     const pile = newTableau[pileIndex];
+    console.log("pile:", pile);
     newTableau[pileIndex] = pile.slice(0, pile.indexOf(card));
 
     const topCard = newTableau[pileIndex][newTableau[pileIndex].length - 1];
@@ -62,10 +68,8 @@ export const moveCardToTableau = (
   }
 
   // add to tableau
-  newTableau[tableauIndex] = [
-    ...newTableau[tableauIndex],
-    { ...card, faceup: true },
-  ];
+  if (!newTableau[tableauIndex]) newTableau[tableauIndex] = [];
+  newTableau[tableauIndex].push({ ...card, faceup: true });
 
   return { ...game, waste: newWaste, tableau: newTableau };
 };

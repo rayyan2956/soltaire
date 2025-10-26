@@ -23,6 +23,7 @@ const Foundation: React.FC<FoundationProps> = ({ foundations }) => {
                 suit={topCard.suit}
                 color={topCard.color}
                 faceUp={topCard.faceup}
+                
               />
             ) : (
               <span className="text-gray-200 text-2xl">

@@ -11,23 +11,31 @@ interface TableauProps {
 }
 
 const Tableau: React.FC<TableauProps> = ({ game, setGame }) => {
-  
   const handleDragStart = (e: React.DragEvent, card: CardType) => {
     e.dataTransfer.setData("cardId", card.id.toString());
+    e.dataTransfer.setData("source", "tableau");
   };
   const handleDrop = (e: React.DragEvent, targetPileIndex: number) => {
-    console.log("target pile index:", targetPileIndex); 
     const cardId = Number(e.dataTransfer.getData("cardId"));
-    console.log("dropped card id:", cardId);
-    console.log()
-    const draggedCard = game.tableau.flat().find((c) => c.id === cardId);
-    if (!draggedCard) return;
-    console.log("found dragged card:", draggedCard);
+    const source = e.dataTransfer.getData("source") as
+      | "tableau"
+      | "waste"
+      | "stock";
+
+    const draggedCard =
+      source === "waste"
+        ? game.waste.find((c) => c.id === cardId)
+        : game.tableau.flat().find((c) => c.id === cardId);
+
+
 
     // Validate move (add logic here)
     // For now, just move it
+
+    if (!draggedCard) return;
+
     setGame((prev) =>
-      moveCardToTableau(prev, draggedCard, "tableau", targetPileIndex)
+      moveCardToTableau(prev, draggedCard!, source, targetPileIndex)
     );
   };
 
@@ -44,8 +52,8 @@ const Tableau: React.FC<TableauProps> = ({ game, setGame }) => {
             <div
               key={card.id}
               className={j === 0 ? "" : "-mt-[225px]"}
-              draggable={card.faceup} 
-              onDragStart={(e) => handleDragStart(e, card)} 
+              draggable={card.faceup}
+              onDragStart={(e) => handleDragStart(e, card)}
             >
               <Card
                 rank={card.rank}

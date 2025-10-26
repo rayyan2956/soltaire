@@ -15,7 +15,7 @@ const Stockpile: React.FC<StockpileProps> = ({ game, setGame }) => {
     const drawnCards = [];
 
     for (let i = 0; i < 3; i++) {
-      const card = newStock.pop(); 
+      const card = newStock.pop();
       if (!card) break;
       drawnCards.push({ ...card, faceup: true });
     }
@@ -27,7 +27,7 @@ const Stockpile: React.FC<StockpileProps> = ({ game, setGame }) => {
   const resetStock = () => {
     if (game.waste.length === 0) return;
 
-    const newStock = game.waste.map((c) => ({ ...c, faceup: false })).reverse(); 
+    const newStock = game.waste.map((c) => ({ ...c, faceup: false })).reverse();
     setGame((prev) => ({ ...prev, stock: newStock, waste: [] }));
   };
 
@@ -60,6 +60,11 @@ const Stockpile: React.FC<StockpileProps> = ({ game, setGame }) => {
             className={`relative transition-all duration-500 ease-in-out transform 
               hover:-translate-y-2 hover:scale-105`}
             style={{ zIndex: i }}
+            draggable={true}
+            onDragStart={(e) => {
+              e.dataTransfer.setData("cardId", card.id.toString());
+              e.dataTransfer.setData("source", "waste");
+            }}
           >
             <Card
               rank={card.rank}
