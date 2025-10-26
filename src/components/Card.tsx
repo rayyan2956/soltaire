@@ -5,6 +5,7 @@ interface CardProps {
   suit: string;
   color: string;
   faceUp: boolean;
+  onDragStart?: (e: React.DragEvent, cardId: number) => void;
 }
 
 const Card: React.FC<CardProps> = ({ rank, suit, color, faceUp }) => {
@@ -41,7 +42,9 @@ const Card: React.FC<CardProps> = ({ rank, suit, color, faceUp }) => {
       {faceUp ? (
         <>
           {/* Top Left */}
-          <div className={`absolute top-2 left-2 text-lg font-bold ${textColor}`}>
+          <div
+            className={`absolute top-2 left-2 text-lg font-bold ${textColor}`}
+          >
             {rank}
             <div className="-mt-1">{suitSymbol}</div>
           </div>
@@ -52,7 +55,11 @@ const Card: React.FC<CardProps> = ({ rank, suit, color, faceUp }) => {
               // Numbered cards show multiple suit symbols
               <div
                 className={`grid grid-cols-3 gap-y-1 justify-items-center text-2xl ${textColor}`}
-                style={{ gridTemplateRows: `repeat(${Math.ceil(numericValue / 3)}, 1fr)` }}
+                style={{
+                  gridTemplateRows: `repeat(${Math.ceil(
+                    numericValue / 3
+                  )}, 1fr)`,
+                }}
               >
                 {Array.from({ length: numericValue }).map((_, i) => (
                   <div key={i}>{suit}</div>
@@ -60,7 +67,9 @@ const Card: React.FC<CardProps> = ({ rank, suit, color, faceUp }) => {
               </div>
             ) : (
               // Face cards (J, Q, K, A)
-              <div className={`text-6xl font-semibold ${textColor}`}>{rank}</div>
+              <div className={`text-6xl font-semibold ${textColor}`}>
+                {rank}
+              </div>
             )}
           </div>
 

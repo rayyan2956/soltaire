@@ -22,7 +22,7 @@ const App: React.FC = () => { const [game, setGame] = useState<GameState>(initia
       </div>
 
       <div className="flex justify-center mt-16">
-        <Tableau tableau={game.tableau} />
+        <Tableau   game={game} setGame={setGame}/>
       </div>
     </div>
   )
