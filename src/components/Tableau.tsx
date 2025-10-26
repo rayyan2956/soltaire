@@ -2,8 +2,7 @@ import React from "react";
 import Card from "./Card";
 import type { Card as CardType } from "../data/Deck";
 import type { GameState } from "../game/GameState";
-import { canMoveToFoundation } from "../game/Rules";
-import { moveCardToFoundation, moveCardToTableau } from "../game/GameAction";
+import { moveCardToTableau } from "../game/GameAction";
 
 interface TableauProps {
   game: GameState;
@@ -19,8 +18,7 @@ const Tableau: React.FC<TableauProps> = ({ game, setGame }) => {
     const cardId = Number(e.dataTransfer.getData("cardId"));
     const source = e.dataTransfer.getData("source") as
       | "tableau"
-      | "waste"
-      | "stock";
+      | "waste";
 
     const draggedCard =
       source === "waste"

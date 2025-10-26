@@ -8,6 +8,8 @@ export function moveCardToFoundation(
   foundationIndex: number
 ): GameState {
   const newFoundations = [...game.foundations];
+  let newWaste = [...game.waste];
+  const newTableau = game.tableau.map((pile) => [...pile]);
 
   if (source === "tableau") {
     const tableau = game.tableau.map((pile) => [...pile]);
@@ -35,6 +37,22 @@ export function moveCardToFoundation(
       foundations: newFoundations,
     };
   }
+  if (source === "waste") {
+    newWaste = newWaste.filter((c) => c.id !== card.id);
+  }
+
+  // 🏆 Add to foundation
+  newFoundations[foundationIndex] = [
+    ...newFoundations[foundationIndex],
+    { ...card, faceup: true },
+  ];
+
+  return {
+    ...game,
+    tableau: newTableau,
+    waste: newWaste,
+    foundations: newFoundations,
+  };
 
   return game;
 }
@@ -49,12 +67,10 @@ export const moveCardToTableau = (
   let newWaste = [...game.waste];
   // remove from source
 
-
   console.log("source:", source);
   if (source === "waste") {
     newWaste = newWaste.filter((c) => c.id !== card.id);
     console.log("new waste:", newWaste);
-
   } else {
     const pileIndex = newTableau.findIndex((p) => p.includes(card));
     console.log("pile index:", pileIndex);

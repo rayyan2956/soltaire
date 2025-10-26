@@ -18,7 +18,7 @@ const App: React.FC = () => { const [game, setGame] = useState<GameState>(initia
 
         <Stockpile game={game} setGame={setGame} />
         </div>
-        <Foundation foundations={game.foundations} />
+        <Foundation game={game} setGame={setGame} />
       </div>
 
       <div className="flex justify-center mt-16">
