@@ -1,4 +1,3 @@
-
 import './App.css'
 import Foundation from './components/Foundation'
 import Navbar from './components/layout'

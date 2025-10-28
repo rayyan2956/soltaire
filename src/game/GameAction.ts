@@ -18,7 +18,7 @@ export function moveCardToFoundation(
     );
     console.log("source index:", sourceIndex);
 
-    if (sourceIndex === -1) return game; // card not found
+    if (sourceIndex === -1) return game;
 
     tableau[sourceIndex].pop();
 
@@ -41,7 +41,6 @@ export function moveCardToFoundation(
     newWaste = newWaste.filter((c) => c.id !== card.id);
   }
 
-  // 🏆 Add to foundation
   newFoundations[foundationIndex] = [
     ...newFoundations[foundationIndex],
     { ...card, faceup: true },
