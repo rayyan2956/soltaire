@@ -3,6 +3,7 @@ import Card from "./Card";
 import type { Card as CardType } from "../data/Deck";
 import type { GameState } from "../game/GameState";
 import { moveCardToTableau } from "../game/GameAction";
+import { Stack } from "../Structures/Stack";
 
 interface TableauProps {
   game: GameState;
@@ -33,11 +34,22 @@ const Tableau: React.FC<TableauProps> = ({ game, setGame }) => {
       if (error) {
         setError(error);
         setTimeout(() => setError(null), 2000);
-        return prev; 
+        return prev;
       }
-      return updatedGame;   
+      return updatedGame;
     });
   };
+
+  // Ensure all tableau piles always exist (usually 7 in Solitaire)
+  const tableau =
+    game.tableau.length === 7
+      ? game.tableau
+      : [
+          ...game.tableau,
+          ...Array(7 - game.tableau.length)
+            .fill(null)
+            .map(() => new Stack<CardType>()),
+        ];
 
   return (
     <div className="relative">
@@ -48,30 +60,36 @@ const Tableau: React.FC<TableauProps> = ({ game, setGame }) => {
       )}
 
       <div className="flex justify-center gap-8 mt-10">
-        {game.tableau.map((pile, i) => {
+        {tableau.map((pile, i) => {
           const cards = pile.toArray();
           return (
             <div
               key={i}
-              className="flex flex-col relative"
+              className="flex flex-col relative min-w-[180px] min-h-[200px] border border-white/30 rounded-lg bg-green-900/10 hover:bg-green-900/20 transition"
               onDrop={(e) => handleDrop(e, i)}
               onDragOver={(e) => e.preventDefault()}
             >
-              {cards.map((card: CardType, j: number) => (
-                <div
-                  key={card.id}
-                  className={j === 0 ? "" : "-mt-[225px]"}
-                  draggable={card.faceup}
-                  onDragStart={(e) => handleDragStart(e, card)}
-                >
-                  <Card
-                    rank={card.rank}
-                    suit={card.suit}
-                    color={card.color}
-                    faceUp={card.faceup}
-                  />
+              {cards.length === 0 ? (
+                <div className="flex items-center justify-center h-full text-white/50 text-sm select-none">
+                  Empty
                 </div>
-              ))}
+              ) : (
+                cards.map((card: CardType, j: number) => (
+                  <div
+                    key={card.id}
+                    className={j === 0 ? "" : "-mt-[225px]"}
+                    draggable={card.faceup}
+                    onDragStart={(e) => handleDragStart(e, card)}
+                  >
+                    <Card
+                      rank={card.rank}
+                      suit={card.suit}
+                      color={card.color}
+                      faceUp={card.faceup}
+                    />
+                  </div>
+                ))
+              )}
             </div>
           );
         })}
