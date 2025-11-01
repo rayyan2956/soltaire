@@ -1,5 +1,6 @@
 import type { GameState } from "./GameState";
 import type { Card } from "../data/Deck";
+import { Stack } from "../Structures/Stack";
 
 export function moveCardToFoundation(
   game: GameState,
@@ -9,27 +10,24 @@ export function moveCardToFoundation(
 ): GameState {
   const newFoundations = [...game.foundations];
   let newWaste = [...game.waste];
-  const newTableau = game.tableau.map((pile) => [...pile]);
+  const newTableau = game.tableau.map((pile: Stack<Card>) => new Stack<Card>(pile.toArray()));
 
   if (source === "tableau") {
-    const tableau = game.tableau.map((pile) => [...pile]);
-    const sourceIndex = tableau.findIndex((pile) =>
-      pile.some((c) => c.id === card.id)
+    const tableau = game.tableau.map((pile: Stack<Card>) => new Stack<Card>(pile.toArray()));
+    const sourceIndex = tableau.findIndex((pile: Stack<Card>) =>
+      pile.toArray().some((c: Card) => c.id === card.id)
     );
-    console.log("source index:", sourceIndex);
 
     if (sourceIndex === -1) return game;
 
-    tableau[sourceIndex].pop();
+    const sourcePile = tableau[sourceIndex];
+    sourcePile.pop();
 
-    // Flip next card if needed
-    const top = tableau[sourceIndex][tableau[sourceIndex].length - 1];
+    const top = sourcePile.peek();
     if (top && !top.faceup) top.faceup = true;
 
-    newFoundations[foundationIndex] = [
-      ...newFoundations[foundationIndex],
-      { ...card, faceup: true },
-    ];
+    newFoundations[foundationIndex].push({ ...card, faceup: true });
+
 
     return {
       ...game,
@@ -37,14 +35,15 @@ export function moveCardToFoundation(
       foundations: newFoundations,
     };
   }
+
   if (source === "waste") {
-    newWaste = newWaste.filter((c) => c.id !== card.id);
+    newWaste = newWaste.filter((c: Card) => c.id !== card.id);
   }
 
-  newFoundations[foundationIndex] = [
-    ...newFoundations[foundationIndex],
-    { ...card, faceup: true },
-  ];
+  const newCard: Card = { ...card, faceup: true };
+  newFoundations[foundationIndex].push(newCard);
+
+
 
   return {
     ...game,
@@ -52,8 +51,6 @@ export function moveCardToFoundation(
     waste: newWaste,
     foundations: newFoundations,
   };
-
-  return game;
 }
 
 export const moveCardToTableau = (
@@ -62,28 +59,31 @@ export const moveCardToTableau = (
   source: "tableau" | "waste",
   tableauIndex: number
 ): GameState => {
-  const newTableau = game.tableau.map((p) => [...p]);
+  const newTableau = game.tableau.map((pile: Stack<Card>) => new Stack<Card>(pile.toArray()));
+  
   let newWaste = [...game.waste];
-  // remove from source
 
-  console.log("source:", source);
   if (source === "waste") {
-    newWaste = newWaste.filter((c) => c.id !== card.id);
-    console.log("new waste:", newWaste);
+    newWaste = newWaste.filter((c: Card) => c.id !== card.id);
   } else {
-    const pileIndex = newTableau.findIndex((p) => p.includes(card));
-    console.log("pile index:", pileIndex);
-    if (pileIndex === -1) return game; // card not found
-    const pile = newTableau[pileIndex];
-    console.log("pile:", pile);
-    newTableau[pileIndex] = pile.slice(0, pile.indexOf(card));
+    const pileIndex = newTableau.findIndex((pile: Stack<Card>) =>
+      pile.toArray().some((c: Card) => c.id === card.id)
+    );
+    if (pileIndex === -1) return game;
 
-    const topCard = newTableau[pileIndex][newTableau[pileIndex].length - 1];
+    const pile = newTableau[pileIndex];
+    const temp = pile.toArray();
+    const cutIndex = temp.findIndex((c: Card) => c.id === card.id);
+    const newCards = temp.slice(0, cutIndex);
+
+    newTableau[pileIndex] = new Stack<Card>();
+    newCards.forEach((c: Card) => newTableau[pileIndex].push(c));
+
+    const topCard = newTableau[pileIndex].peek();
     if (topCard && !topCard.faceup) topCard.faceup = true;
   }
 
-  // add to tableau
-  if (!newTableau[tableauIndex]) newTableau[tableauIndex] = [];
+  if (!newTableau[tableauIndex]) newTableau[tableauIndex] = new Stack<Card>();
   newTableau[tableauIndex].push({ ...card, faceup: true });
 
   return { ...game, waste: newWaste, tableau: newTableau };
