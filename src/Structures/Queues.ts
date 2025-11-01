@@ -1,5 +1,9 @@
 export class Queue<T> {
-  private items: T[] = [];
+  private items: T[];
+
+  constructor(initial?: T[]) {
+    this.items = initial ? [...initial] : [];
+  }
 
   enqueue(item: T) {
     this.items.push(item);
@@ -9,7 +13,7 @@ export class Queue<T> {
     return this.items.shift();
   }
 
-  front(): T | undefined {
+  peek(): T | undefined {
     return this.items[0];
   }
 
@@ -21,5 +25,7 @@ export class Queue<T> {
     return this.items.length;
   }
 
-  
+  toArray(): T[] {
+    return [...this.items];
+  }
 }

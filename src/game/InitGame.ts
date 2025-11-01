@@ -1,7 +1,7 @@
 import { generateDeck, shuffleDeck} from "../data/Deck";
 import type { Card } from "../data/Deck";
 import { Stack } from "../Structures/Stack";
-
+import { Queue } from "../Structures/Queues";
 import type { GameState } from "./GameState";
 
 export const initializeGame = (): GameState => {
@@ -17,7 +17,9 @@ export const initializeGame = (): GameState => {
     tableau[i] = new Stack<Card>(pileCards); 
     index += i + 1;
   }
-  const stock = deck.slice(index);
+
+  const stockCards = deck.slice(index);
+  const stock = new Queue<Card>(stockCards);
 
   const waste: Card[] = [];
   const foundations: Stack<Card>[] = [

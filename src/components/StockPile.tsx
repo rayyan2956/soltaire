@@ -1,6 +1,9 @@
 import React from "react";
 import Card from "./Card";
 import type { GameState } from "../game/GameState";
+import { Queue } from "../Structures/Queues";
+import type { Card as CardType } from "../data/Deck";
+
 
 interface StockpileProps {
   game: GameState;
@@ -9,13 +12,13 @@ interface StockpileProps {
 
 const Stockpile: React.FC<StockpileProps> = ({ game, setGame }) => {
   const drawCards = () => {
-    if (game.stock.length === 0) return;
+    if (game.stock.isEmpty()) return;
 
-    const newStock = [...game.stock];
-    const drawnCards = [];
+    const newStock = new Queue<CardType>(game.stock.toArray());
+    const drawnCards: CardType[] = [];
 
     for (let i = 0; i < 3; i++) {
-      const card = newStock.pop();
+      const card = newStock.dequeue();
       if (!card) break;
       drawnCards.push({ ...card, faceup: true });
     }
@@ -27,7 +30,9 @@ const Stockpile: React.FC<StockpileProps> = ({ game, setGame }) => {
   const resetStock = () => {
     if (game.waste.length === 0) return;
 
-    const newStock = game.waste.map((c) => ({ ...c, faceup: false })).reverse();
+    const reversedWaste = [...game.waste].reverse().map((c) => ({ ...c, faceup: false }));
+    const newStock = new Queue<CardType>(reversedWaste);
+
     setGame((prev) => ({ ...prev, stock: newStock, waste: [] }));
   };
 
@@ -36,14 +41,12 @@ const Stockpile: React.FC<StockpileProps> = ({ game, setGame }) => {
       {/* Stock */}
       <div
         className={`w-40 h-60 border border-white/30 rounded-lg shadow-md flex items-center justify-center cursor-pointer
-          ${
-            game.stock.length > 0 ? "bg-red-800" : "bg-gray-700"
-          } transition-colors duration-300`}
-        onClick={game.stock.length > 0 ? drawCards : resetStock}
+          ${!game.stock.isEmpty() ? "bg-red-800" : "bg-gray-700"} transition-colors duration-300`}
+        onClick={!game.stock.isEmpty() ? drawCards : resetStock}
       >
-        {game.stock.length > 0 ? (
+        {!game.stock.isEmpty() ? (
           <div className="text-white/50 text-sm">
-            Deck ({game.stock.length})
+            Deck ({game.stock.size()})
           </div>
         ) : (
           <div className="text-white/50 text-sm">
@@ -57,8 +60,7 @@ const Stockpile: React.FC<StockpileProps> = ({ game, setGame }) => {
         {game.waste.slice(-3).map((card, i) => (
           <div
             key={card.id}
-            className={`relative transition-all duration-500 ease-in-out transform 
-              hover:-translate-y-2 hover:scale-105`}
+            className="relative transition-all duration-500 ease-in-out transform hover:-translate-y-2 hover:scale-105"
             style={{ zIndex: i }}
             draggable={true}
             onDragStart={(e) => {
