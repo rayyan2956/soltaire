@@ -10,7 +10,6 @@ export function moveCardToFoundation(
 ): GameState {
   const newFoundations = [...game.foundations];
   let newWaste = [...game.waste];
-  const newTableau = game.tableau.map((pile: Stack<Card>) => new Stack<Card>(pile.toArray()));
 
   if (source === "tableau") {
     const tableau = game.tableau.map((pile: Stack<Card>) => new Stack<Card>(pile.toArray()));
@@ -47,44 +46,47 @@ export function moveCardToFoundation(
 
   return {
     ...game,
-    tableau: newTableau,
     waste: newWaste,
     foundations: newFoundations,
   };
 }
+
 
 export const moveCardToTableau = (
   game: GameState,
   card: Card,
   source: "tableau" | "waste",
   tableauIndex: number
+
 ): GameState => {
   const newTableau = game.tableau.map((pile: Stack<Card>) => new Stack<Card>(pile.toArray()));
-  
   let newWaste = [...game.waste];
 
   if (source === "waste") {
-    newWaste = newWaste.filter((c: Card) => c.id !== card.id);
+    newWaste = newWaste.filter(c => c.id !== card.id);
+    newTableau[tableauIndex].push({ ...card, faceup: true });
   } else {
-    const pileIndex = newTableau.findIndex((pile: Stack<Card>) =>
-      pile.toArray().some((c: Card) => c.id === card.id)
+    const pileIndex = newTableau.findIndex(pile =>
+      pile.toArray().some(c => c.id === card.id)
     );
     if (pileIndex === -1) return game;
 
     const pile = newTableau[pileIndex];
     const temp = pile.toArray();
-    const cutIndex = temp.findIndex((c: Card) => c.id === card.id);
-    const newCards = temp.slice(0, cutIndex);
+    const cutIndex = temp.findIndex(c => c.id === card.id);
+    console.log("pile", pile);
+    const movingCards = temp.slice(cutIndex);
+    const remainingCards = temp.slice(0, cutIndex);
 
     newTableau[pileIndex] = new Stack<Card>();
-    newCards.forEach((c: Card) => newTableau[pileIndex].push(c));
+    remainingCards.forEach(c => newTableau[pileIndex].push(c));
 
     const topCard = newTableau[pileIndex].peek();
     if (topCard && !topCard.faceup) topCard.faceup = true;
-  }
 
-  if (!newTableau[tableauIndex]) newTableau[tableauIndex] = new Stack<Card>();
-  newTableau[tableauIndex].push({ ...card, faceup: true });
+    if (!newTableau[tableauIndex]) newTableau[tableauIndex] = new Stack<Card>();
+    movingCards.forEach(c => newTableau[tableauIndex].push({ ...c, faceup: true }));
+  }
 
   return { ...game, waste: newWaste, tableau: newTableau };
 };
