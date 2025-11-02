@@ -1,9 +1,23 @@
 import type { GameState } from "./GameState";
 import type { Card } from "../data/Deck";
 import { Stack } from "../Structures/Stack";
-
+import { saveGameState } from "./GameHistory";
 function getCardValue(rank: string): number {
-  const order = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];
+  const order = [
+    "A",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7",
+    "8",
+    "9",
+    "10",
+    "J",
+    "Q",
+    "K",
+  ];
   return order.indexOf(rank) + 1;
 }
 
@@ -28,12 +42,14 @@ export function moveCardToFoundation(
   // Validate move
   if (topCard) {
     const sameSuit = topCard.suit === card.suit;
-    const correctOrder = getCardValue(card.rank) === getCardValue(topCard.rank) + 1;
+    const correctOrder =
+      getCardValue(card.rank) === getCardValue(topCard.rank) + 1;
     if (!sameSuit || !correctOrder)
       return { updatedGame: game, error: "Invalid move to foundation!" };
   } else if (card.rank !== "A") {
     return { updatedGame: game, error: "Only Aces can start a foundation!" };
   }
+  saveGameState(game);
 
   // Handle tableau source
   if (source === "tableau") {
@@ -76,7 +92,6 @@ export function moveCardToFoundation(
     newWaste = newWaste.filter((c) => c.id !== card.id);
     foundation.push({ ...card, faceup: true });
   }
-
   return {
     updatedGame: {
       ...game,
@@ -106,12 +121,17 @@ export const moveCardToTableau = (
 
   if (targetTop) {
     const oppositeColor = targetTop.color !== card.color;
-    const correctOrder = getCardValue(targetTop.rank) === getCardValue(card.rank) + 1;
+    const correctOrder =
+      getCardValue(targetTop.rank) === getCardValue(card.rank) + 1;
     if (!oppositeColor || !correctOrder)
       return { updatedGame: game, error: "Invalid move to tableau!" };
   } else if (card.rank !== "K") {
-    return { updatedGame: game, error: "Only Kings can be placed on empty piles!" };
+    return {
+      updatedGame: game,
+      error: "Only Kings can be placed on empty piles!",
+    };
   }
+  saveGameState(game);
 
   if (source === "waste") {
     if (!newWaste.some((c) => c.id === card.id))
