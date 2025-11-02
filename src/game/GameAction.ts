@@ -132,7 +132,6 @@ export const moveCardToTableau = (
     };
   }
   saveGameState(game);
-
   if (source === "waste") {
     if (!newWaste.some((c) => c.id === card.id))
       return { updatedGame: game, error: "Card not found in waste!" };

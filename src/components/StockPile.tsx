@@ -3,7 +3,7 @@ import Card from "./Card";
 import type { GameState } from "../game/GameState";
 import { Queue } from "../Structures/Queues";
 import type { Card as CardType } from "../data/Deck";
-
+import { saveGameState } from "../game/GameHistory";
 
 interface StockpileProps {
   game: GameState;
@@ -13,6 +13,8 @@ interface StockpileProps {
 const Stockpile: React.FC<StockpileProps> = ({ game, setGame }) => {
   const drawCards = () => {
     if (game.stock.isEmpty()) return;
+
+    saveGameState(game);
 
     const newStock = new Queue<CardType>(game.stock.toArray());
     const drawnCards: CardType[] = [];
@@ -29,6 +31,8 @@ const Stockpile: React.FC<StockpileProps> = ({ game, setGame }) => {
 
   const resetStock = () => {
     if (game.waste.length === 0) return;
+
+    saveGameState(game);
 
     const reversedWaste = [...game.waste].reverse().map((c) => ({ ...c, faceup: false }));
     const newStock = new Queue<CardType>(reversedWaste);
