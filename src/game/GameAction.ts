@@ -1,6 +1,9 @@
 import type { GameState } from "./GameState";
 import type { Card } from "../data/Deck";
 import { Stack } from "../Structures/Stack";
+
+import { updateScore } from "./ScoreSystem";
+
 import { saveGameState } from "./GameHistory";
 function getCardValue(rank: string): number {
   const order = [
@@ -49,9 +52,9 @@ export function moveCardToFoundation(
   } else if (card.rank !== "A") {
     return { updatedGame: game, error: "Only Aces can start a foundation!" };
   }
+
   saveGameState(game);
 
-  // Handle tableau source
   if (source === "tableau") {
     const newTableau = game.tableau.map(
       (pile) => new Stack<Card>(pile.toArray())
@@ -75,31 +78,40 @@ export function moveCardToFoundation(
 
     foundation.push({ ...card, faceup: true });
 
-    return {
-      updatedGame: {
-        ...game,
-        tableau: newTableau,
-        foundations: newFoundations,
-      },
+    let updatedGame: GameState = {
+      ...game,
+      tableau: newTableau,
+      foundations: newFoundations,
     };
+
+    // ✅ Add score for tableau → foundation
+    updatedGame = updateScore(updatedGame, 10);
+
+    return { updatedGame };
   }
 
-  // Handle waste source
   if (source === "waste") {
     if (!newWaste.some((c) => c.id === card.id))
       return { updatedGame: game, error: "Card not found in waste!" };
 
     newWaste = newWaste.filter((c) => c.id !== card.id);
     foundation.push({ ...card, faceup: true });
-  }
-  return {
-    updatedGame: {
+
+    let updatedGame: GameState = {
       ...game,
       waste: newWaste,
       foundations: newFoundations,
-    },
-  };
+    };
+
+    // ✅ Add score for waste → foundation
+    updatedGame = updateScore(updatedGame, 5);
+
+    return { updatedGame };
+  }
+
+  return { updatedGame: game };
 }
+
 
 export const moveCardToTableau = (
   game: GameState,
@@ -131,13 +143,23 @@ export const moveCardToTableau = (
       error: "Only Kings can be placed on empty piles!",
     };
   }
+
   saveGameState(game);
+
+  let updatedGame: GameState = { ...game };
+
   if (source === "waste") {
     if (!newWaste.some((c) => c.id === card.id))
       return { updatedGame: game, error: "Card not found in waste!" };
 
     newWaste = newWaste.filter((c) => c.id !== card.id);
     targetPile.push({ ...card, faceup: true });
+
+    // ✅ Add +3 for waste → tableau
+    updatedGame = updateScore(
+      { ...updatedGame, waste: newWaste, tableau: newTableau },
+      3
+    );
   } else {
     const pileIndex = newTableau.findIndex((pile) =>
       pile.toArray().some((c) => c.id === card.id)
@@ -159,16 +181,16 @@ export const moveCardToTableau = (
     remainingCards.forEach((c) => newTableau[pileIndex].push(c));
 
     const topCard = newTableau[pileIndex].peek();
-    if (topCard && !topCard.faceup) topCard.faceup = true;
+    if (topCard && !topCard.faceup) {
+      topCard.faceup = true;
+      // ✅ Add +5 for flipping a card
+      updatedGame = updateScore(updatedGame, 5);
+    }
+    console.log("Current Score:", updatedGame.score);
+
 
     movingCards.forEach((c) => targetPile.push({ ...c, faceup: true }));
+    updatedGame = { ...updatedGame, tableau: newTableau };
   }
-
-  return {
-    updatedGame: {
-      ...game,
-      waste: newWaste,
-      tableau: newTableau,
-    },
-  };
+  return { updatedGame };
 };

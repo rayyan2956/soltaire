@@ -7,5 +7,6 @@ export interface GameState {
   waste: Card[];
   tableau: Stack<Card>[];
   foundations: Stack<Card>[];
+  score: number;
   
 }

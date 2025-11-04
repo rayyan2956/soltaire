@@ -9,7 +9,7 @@ export const initializeGame = (): GameState => {
 
   const tableau: Stack<Card>[] = [];
   let index = 0;
-
+  let score = 0;
  
   for (let i = 0; i < 7; i++) {
     const pileCards = deck.slice(index, index + i + 1);
@@ -29,5 +29,5 @@ export const initializeGame = (): GameState => {
     new Stack<Card>(),
   ];
 
-  return { stock, waste, tableau, foundations: foundations};
+  return { stock, waste, tableau, foundations: foundations , score: score};
 };
