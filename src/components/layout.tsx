@@ -2,11 +2,12 @@ import React, { useEffect, useState } from "react";
 
 interface NavbarProps {
   onUndo: () => void;
+  onHint: () => void;
   onNewGame: () => void;
   score: number; // ✅ Added score prop
 }
 
-const Navbar: React.FC<NavbarProps> = ({ onUndo, onNewGame, score }) => {
+const Navbar: React.FC<NavbarProps> = ({ onUndo,onHint, onNewGame, score }) => {
   const [seconds, setSeconds] = useState(0);
 
   // ✅ Timer logic
@@ -42,7 +43,7 @@ const Navbar: React.FC<NavbarProps> = ({ onUndo, onNewGame, score }) => {
           New Game
         </button>
 
-        <button className="bg-fuchsia-700 hover:bg-fuchsia-600 px-3 py-1 rounded-xl font-black">
+        <button onClick={onHint} className="bg-fuchsia-700 hover:bg-fuchsia-600 px-3 py-1 rounded-xl font-black">
           Hint
         </button>
 

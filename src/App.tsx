@@ -8,6 +8,7 @@ import type { GameState } from "./game/GameState";
 import { initializeGame } from "./game/InitGame";
 import React from "react";
 import { clearHistory, saveGameState, undoMove } from "./game/GameHistory";
+import { getHint } from "./HintSystem";
 
 const App: React.FC = () => {
   const [game, setGame] = useState<GameState>(initializeGame());
@@ -37,6 +38,20 @@ const App: React.FC = () => {
     return () => clearInterval(timer);
   }, [game.gameWon]);
 
+  const [hintMessage, setHintMessage] = useState<string | null>(null);
+
+  const handleHint = () => {
+    const hint = getHint(game);
+    if (hint) {
+      setHintMessage("💡 " + hint);
+    } else {
+      setHintMessage("😅 No valid moves found right now!");
+    }
+
+    // Auto-hide after 4 seconds
+    setTimeout(() => setHintMessage(null), 4000);
+  };
+
   // Convert seconds to mm:ss
   const formatTime = (seconds: number) => {
     const m = Math.floor(seconds / 60)
@@ -54,6 +69,7 @@ const App: React.FC = () => {
         onUndo={handleUndo}
         onNewGame={handleNewGame}
         score={game.score}
+        onHint={() => handleHint()}
       />
 
       {/* Main Game Layout */}
@@ -67,6 +83,16 @@ const App: React.FC = () => {
       <div className="flex justify-center mt-16">
         <Tableau game={game} setGame={setGame} />
       </div>
+      {/* 💡 Hint Popup */}
+      {hintMessage && (
+        <div
+          className="fixed bottom-10 left-1/2 transform -translate-x-1/2 
+    bg-yellow-400 text-green-900 font-semibold px-6 py-3 rounded-full 
+    shadow-lg animate-fadeIn text-lg z-50 transition-opacity duration-500"
+        >
+          {hintMessage}
+        </div>
+      )}
 
       {/* ✅ Win Popup Modal */}
       {game.gameWon && (
