@@ -87,9 +87,9 @@ export function moveCardToFoundation(
 
     // ✅ Add score for tableau → foundation
     updatedGame = updateScore(updatedGame, 10);
-if (checkWin(updatedGame)) {
-  updatedGame.gameWon = true;
-}
+    if (checkWin(updatedGame)) {
+      updatedGame.gameWon = true;
+    }
 
     return { updatedGame };
   }
@@ -109,13 +109,15 @@ if (checkWin(updatedGame)) {
 
     // ✅ Add score for waste → foundation
     updatedGame = updateScore(updatedGame, 5);
+    if (checkWin(updatedGame)) {
+      updatedGame.gameWon = true;
+    }
 
     return { updatedGame };
   }
 
   return { updatedGame: game };
 }
-
 
 export const moveCardToTableau = (
   game: GameState,
@@ -192,13 +194,13 @@ export const moveCardToTableau = (
     }
     console.log("Current Score:", updatedGame.score);
 
-
     movingCards.forEach((c) => targetPile.push({ ...c, faceup: true }));
     updatedGame = { ...updatedGame, tableau: newTableau };
   }
   if (checkWin(updatedGame)) {
-  updatedGame.gameWon = true;
-}
+    updatedGame.gameWon = true;
+  }
+  
 
   return { updatedGame };
 };
