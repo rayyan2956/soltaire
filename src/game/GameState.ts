@@ -8,5 +8,5 @@ export interface GameState {
   tableau: Stack<Card>[];
   foundations: Stack<Card>[];
   score: number;
-  
+  gameWon?: boolean;
 }

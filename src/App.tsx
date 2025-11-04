@@ -25,6 +25,14 @@ const App: React.FC = () => {
     saveGameState(newGame);
     setGame(newGame);
   };
+  {
+    game.gameWon && (
+      <div className="text-center mt-10 text-4xl font-bold text-yellow-300">
+        🎉 You Won the Game! 🎉
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-green-900 text-white flex flex-col">
       {/* ✅ Add key + pass score */}

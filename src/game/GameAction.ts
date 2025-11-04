@@ -3,6 +3,7 @@ import type { Card } from "../data/Deck";
 import { Stack } from "../Structures/Stack";
 
 import { updateScore } from "./ScoreSystem";
+import { checkWin } from "./GameWin";
 
 import { saveGameState } from "./GameHistory";
 function getCardValue(rank: string): number {
@@ -86,6 +87,9 @@ export function moveCardToFoundation(
 
     // ✅ Add score for tableau → foundation
     updatedGame = updateScore(updatedGame, 10);
+if (checkWin(updatedGame)) {
+  updatedGame.gameWon = true;
+}
 
     return { updatedGame };
   }
@@ -192,5 +196,9 @@ export const moveCardToTableau = (
     movingCards.forEach((c) => targetPile.push({ ...c, faceup: true }));
     updatedGame = { ...updatedGame, tableau: newTableau };
   }
+  if (checkWin(updatedGame)) {
+  updatedGame.gameWon = true;
+}
+
   return { updatedGame };
 };
