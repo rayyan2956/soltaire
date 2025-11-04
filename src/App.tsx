@@ -6,6 +6,8 @@ import Tableau from "./components/Tableau";
 import { useState } from "react";
 import type { GameState } from "./game/GameState";
 import { initializeGame } from "./game/InitGame";
+import { clearHistory } from "./game/GameHistory";
+
 import { saveGameState, undoMove } from "./game/GameHistory";
 
 const App: React.FC = () => {
@@ -18,12 +20,11 @@ const App: React.FC = () => {
   };
 
   const handleNewGame = () => {
+    clearHistory();
     const newGame = initializeGame();
     saveGameState(newGame);
     setGame(newGame);
-    setResetCount((prev) => prev + 1); // ✅ Restart timer
   };
-
   return (
     <div className="min-h-screen bg-green-900 text-white flex flex-col">
       {/* ✅ Add key + pass score */}

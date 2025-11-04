@@ -11,26 +11,32 @@ export function saveGameState(game: GameState) {
     waste: [...game.waste],
     tableau: game.tableau.map((s) => s.toArray()),
     foundations: game.foundations.map((s) => s.toArray()),
+    score: game.score ?? 0, // ✅ include score
   };
 
   gameHistory.push(snapshot as unknown as GameState);
   console.log("Game state saved. History size:", gameHistory.size(), snapshot);
 }
 
+
 // Undo
 export function undoMove(game: GameState): GameState {
   console.log("Attempting to undo move. History size:", gameHistory.size(), gameHistory);
   if (gameHistory.isEmpty()) return game;
-  gameHistory.pop();
 
+  gameHistory.pop(); // remove current
   const prev = gameHistory.peek();
   if (!prev) return game;
 
-  // ✅ reconstruct proper Stack and Queue instances
   return {
     stock: new Queue(prev.stock as any),
     waste: [...prev.waste],
     tableau: (prev.tableau as any[]).map((t) => new Stack(t)),
     foundations: (prev.foundations as any[]).map((f) => new Stack(f)),
+    score: prev.score ?? 0, // ✅ restore score safely
   };
+}
+
+export function clearHistory() {
+  while (!gameHistory.isEmpty()) gameHistory.pop();
 }
