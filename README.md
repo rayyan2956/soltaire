@@ -72,46 +72,43 @@ src/
     ├── LinkedList.ts             # Custom linked list for tableau representation
     ├── Stack.ts                  # Stack (LIFO) implementation
     └── Queue.ts                  # Queue (FIFO) for stockpile
+## ⚙️ Game Flow
 
+### 1. Initialization
+- A **52-card deck** is generated and shuffled using the **Fisher–Yates algorithm**.  
+- Cards are distributed into **7 tableau piles**, with the **last card face-up**.  
+- **Four foundation piles** and a **stockpile** are initialized.  
 
-⚙️ Game Flow
-1. Initialization
+### 2. Moves and Validation
+Cards follow standard **Klondike Solitaire rules**:
+- **Tableau:** Alternate colors, descending rank.  
+- **Foundation:** Same suit, ascending order (Ace → King).  
+- Validation logic is handled in `Rules.ts`.  
 
-52-card deck is generated and shuffled using Fisher–Yates algorithm.
+### 3. Undo / Redo
+- Implemented using **two stacks** (`undoStack` and `redoStack`) in `GameHistory.ts`.  
+- Each move **clones the game state** before modification.  
 
-Cards are distributed into 7 tableau piles, with the last card face-up.
+### 4. Win Condition
+- The player **wins** when all four foundations are filled (**A–K of each suit**).  
 
-Four foundation piles and a stockpile are initialized.
+---
 
-2. Moves and Validation
+## 🧠 Data Structures Used
 
-Cards follow Klondike rules:
+| Data Structure | Purpose | Implementation |
+|----------------|----------|----------------|
+| **Stack** | Foundation & Undo/Redo | LIFO operations for game state tracking |
+| **Queue** | Stockpile | FIFO draw mechanism |
+| **Linked List** | Tableau Piles | Dynamic insertion/removal of cards |
+| **Array** | Deck Creation | Random shuffle and card access |
+| **HashMap** | Card State Tracker | O(1) lookup for card positions |
 
-Tableau: Alternate colors, descending rank.
+---
 
-Foundation: Same suit, ascending order (Ace → King).
+## 🧰 Developer Commands
 
-Validation handled via Rules.ts.
-
-3. Undo / Redo
-
-Implemented via two stacks (undoStack and redoStack) in GameHistory.ts.
-
-Each move clones the game state before modification.
-
-4. Win Condition
-
-When all four foundations are filled (A–K of each suit), the player wins.
-
-🧠 Data Structures Used
-Data Structure	Purpose	Implementation
-Stack	Foundation & Undo/Redo	LIFO operations for game state tracking
-Queue	Stockpile	FIFO draw mechanism
-Linked List	Tableau Piles	Dynamic insertion/removal of cards
-Array	Deck Creation	Random shuffle and card access
-HashMap	Card State Tracker	O(1) lookup for card positions  
-
-🧰 Developer Commands
-Purpose	Command
-Run app locally	npm run dev
-Build production bundle	npm run build
+| Purpose | Command |
+|----------|----------|
+| Run app locally | `npm run dev` |
+| Build production bundle | `npm run build` |
