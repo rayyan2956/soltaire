@@ -43,7 +43,6 @@ export function moveCardToFoundation(
   const foundationCards = foundation.toArray();
   const topCard = foundationCards[foundationCards.length - 1];
 
-  // Validate move
   if (topCard) {
     const sameSuit = topCard.suit === card.suit;
     const correctOrder =
@@ -85,7 +84,6 @@ export function moveCardToFoundation(
       foundations: newFoundations,
     };
 
-    // ✅ Add score for tableau → foundation
     updatedGame = updateScore(updatedGame, 10);
     if (checkWin(updatedGame)) {
       updatedGame.gameWon = true;
@@ -107,7 +105,6 @@ export function moveCardToFoundation(
       foundations: newFoundations,
     };
 
-    // ✅ Add score for waste → foundation
     updatedGame = updateScore(updatedGame, 5);
     if (checkWin(updatedGame)) {
       updatedGame.gameWon = true;
@@ -161,7 +158,6 @@ export const moveCardToTableau = (
     newWaste = newWaste.filter((c) => c.id !== card.id);
     targetPile.push({ ...card, faceup: true });
 
-    // ✅ Add +3 for waste → tableau
     updatedGame = updateScore(
       { ...updatedGame, waste: newWaste, tableau: newTableau },
       3
@@ -189,7 +185,6 @@ export const moveCardToTableau = (
     const topCard = newTableau[pileIndex].peek();
     if (topCard && !topCard.faceup) {
       topCard.faceup = true;
-      // ✅ Add +5 for flipping a card
       updatedGame = updateScore(updatedGame, 5);
     }
     console.log("Current Score:", updatedGame.score);
@@ -200,7 +195,6 @@ export const moveCardToTableau = (
   if (checkWin(updatedGame)) {
     updatedGame.gameWon = true;
   }
-  
 
   return { updatedGame };
 };

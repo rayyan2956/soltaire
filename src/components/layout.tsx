@@ -4,19 +4,17 @@ interface NavbarProps {
   onUndo: () => void;
   onHint: () => void;
   onNewGame: () => void;
-  score: number; // ✅ Added score prop
+  score: number;
 }
 
 const Navbar: React.FC<NavbarProps> = ({ onUndo,onHint, onNewGame, score }) => {
   const [seconds, setSeconds] = useState(0);
 
-  // ✅ Timer logic
   useEffect(() => {
     const timer = setInterval(() => setSeconds((prev) => prev + 1), 1000);
     return () => clearInterval(timer); // cleanup
   }, []);
 
-  // Format time as MM:SS
   const formatTime = (secs: number) => {
     const minutes = Math.floor(secs / 60);
     const seconds = secs % 60;

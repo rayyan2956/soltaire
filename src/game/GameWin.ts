@@ -1,7 +1,6 @@
 import type { GameState } from "./GameState";
 
 export function checkWin(game: GameState): boolean {
-  // 🏁 Condition 1: All 52 cards in foundations
   const totalFoundationCards = game.foundations.reduce(
     (sum, pile) => sum + pile.size(),
     0
@@ -9,7 +8,6 @@ export function checkWin(game: GameState): boolean {
 
   if (totalFoundationCards === 52) return true;
 
-  // 🃏 Condition 2: All tableau cards are face up
   const allFaceUp = game.tableau.every((pile) =>
     pile.toArray().every((card) => card.faceup)
   );

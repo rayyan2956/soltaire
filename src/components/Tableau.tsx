@@ -40,7 +40,6 @@ const Tableau: React.FC<TableauProps> = ({ game, setGame }) => {
     });
   };
 
-  // Ensure all tableau piles always exist (usually 7 in Solitaire)
   const tableau =
     game.tableau.length === 7
       ? game.tableau

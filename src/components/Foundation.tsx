@@ -33,8 +33,8 @@ const Foundation: React.FC<FoundationProps> = ({ game, setGame }) => {
 
       if (error) {
         setError(error);
-        setTimeout(() => setError(null), 2000); // hide after 2s
-        return prev; // keep previous game state
+        setTimeout(() => setError(null), 2000); 
+        return prev; 
       }
 
       return updatedGame;

@@ -10,14 +10,14 @@ export class LinkedList<T> {
   head: Node<T> | null = null;
   size: number = 0;
 
-  addFirst(value: T) {  // Push at head
+  addFirst(value: T) {
     const node = new Node(value);
     node.next = this.head;
     this.head = node;
     this.size++;
   }
 
-  removeFirst(): T | null { // Pop from head
+  removeFirst(): T | null {
     if (!this.head) return null;
     const value = this.head.value;
     this.head = this.head.next;

@@ -4,24 +4,25 @@ import type { GameState } from "./GameState";
 
 export const gameHistory = new Stack<GameState>();
 
-// Save
 export function saveGameState(game: GameState) {
   const snapshot = {
     stock: game.stock.toArray(),
     waste: [...game.waste],
     tableau: game.tableau.map((s) => s.toArray()),
     foundations: game.foundations.map((s) => s.toArray()),
-    score: game.score ?? 0, // ✅ include score
+    score: game.score ?? 0,
   };
 
   gameHistory.push(snapshot as unknown as GameState);
   console.log("Game state saved. History size:", gameHistory.size(), snapshot);
 }
 
-
-// Undo
 export function undoMove(game: GameState): GameState {
-  console.log("Attempting to undo move. History size:", gameHistory.size(), gameHistory);
+  console.log(
+    "Attempting to undo move. History size:",
+    gameHistory.size(),
+    gameHistory
+  );
   if (gameHistory.isEmpty()) return game;
 
   gameHistory.pop(); // remove current
@@ -33,7 +34,7 @@ export function undoMove(game: GameState): GameState {
     waste: [...prev.waste],
     tableau: (prev.tableau as any[]).map((t) => new Stack(t)),
     foundations: (prev.foundations as any[]).map((f) => new Stack(f)),
-    score: prev.score ?? 0, // ✅ restore score safely
+    score: prev.score ?? 0,
   };
 }
 

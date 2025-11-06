@@ -8,12 +8,12 @@ import type { GameState } from "./game/GameState";
 import { initializeGame } from "./game/InitGame";
 import React from "react";
 import { clearHistory, saveGameState, undoMove } from "./game/GameHistory";
-import { getHint } from "./HintSystem";
+import { getHint } from "./game/HintSystem";
 
 const App: React.FC = () => {
   const [game, setGame] = useState<GameState>(initializeGame());
-  const [resetCount, setResetCount] = useState(0); // for timer reset
-  const [timeElapsed, setTimeElapsed] = useState(0); // to track time
+  const [resetCount, setResetCount] = useState(0);
+  const [timeElapsed, setTimeElapsed] = useState(0);
 
   const handleUndo = () => {
     console.log("Undo button clicked.");
@@ -29,9 +29,8 @@ const App: React.FC = () => {
     setTimeElapsed(0);
   };
 
-  // Timer logic
   React.useEffect(() => {
-    if (game.gameWon) return; // stop timer on win
+    if (game.gameWon) return;
     const timer = setInterval(() => {
       setTimeElapsed((prev) => prev + 1);
     }, 1000);
@@ -48,11 +47,9 @@ const App: React.FC = () => {
       setHintMessage("😅 No valid moves found right now!");
     }
 
-    // Auto-hide after 4 seconds
     setTimeout(() => setHintMessage(null), 4000);
   };
 
-  // Convert seconds to mm:ss
   const formatTime = (seconds: number) => {
     const m = Math.floor(seconds / 60)
       .toString()
