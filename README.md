@@ -44,34 +44,6 @@ All systems were coded from scratch, showcasing algorithmic problem-solving and 
 
 ---
 
-## 📁 Project Structure
-
-```plaintext
-src/
-│
-├── components/                   # React UI components
-│   ├── Card.tsx                  # Displays individual card
-│   ├── Foundation.tsx            # Foundation piles (A–K)
-│   ├── Tableau.tsx               # Tableau (7 main columns)
-│   ├── StockPile.tsx             # Stock and waste piles
-│   └── layout.tsx                # Main game layout and render logic
-│
-├── data/
-│   └── Deck.ts                   # Defines deck, suits, ranks, shuffle logic
-│
-├── game/
-│   ├── GameState.ts              # Manages all piles and card states
-│   ├── InitGame.ts               # Initializes deck and tableau setup
-│   ├── GameAction.ts             # Implements moves between piles
-│   ├── Rules.ts                  # Valid move checks (alternating color, rank)
-│   ├── GameHistory.ts            # Undo/Redo using stack-based system
-│   ├── ScoreSystem.ts            # Score tracking and calculation
-│   └── GameWin.ts                # Detects win condition
-│
-└── Structures/
-    ├── LinkedList.ts             # Custom linked list for tableau representation
-    ├── Stack.ts                  # Stack (LIFO) implementation
-    └── Queue.ts                  # Queue (FIFO) for stockpile
 ## ⚙️ Game Flow
 
 ### 1. Initialization
@@ -112,3 +84,33 @@ Cards follow standard **Klondike Solitaire rules**:
 |----------|----------|
 | Run app locally | `npm run dev` |
 | Build production bundle | `npm run build` |
+
+
+## 📁 Project Structure
+
+```plaintext
+src/
+│
+├── components/                   # React UI components
+│   ├── Card.tsx                  # Displays individual card
+│   ├── Foundation.tsx            # Foundation piles (A–K)
+│   ├── Tableau.tsx               # Tableau (7 main columns)
+│   ├── StockPile.tsx             # Stock and waste piles
+│   └── layout.tsx                # Main game layout and render logic
+│
+├── data/
+│   └── Deck.ts                   # Defines deck, suits, ranks, shuffle logic
+│
+├── game/
+│   ├── GameState.ts              # Manages all piles and card states
+│   ├── InitGame.ts               # Initializes deck and tableau setup
+│   ├── GameAction.ts             # Implements moves between piles
+│   ├── Rules.ts                  # Valid move checks (alternating color, rank)
+│   ├── GameHistory.ts            # Undo/Redo using stack-based system
+│   ├── ScoreSystem.ts            # Score tracking and calculation
+│   └── GameWin.ts                # Detects win condition
+│
+└── Structures/
+    ├── LinkedList.ts             # Custom linked list for tableau representation
+    ├── Stack.ts                  # Stack (LIFO) implementation
+    └── Queue.ts                  # Queue (FIFO) for stockpile
